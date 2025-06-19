@@ -1,0 +1,75 @@
+package com.example.mymusicapp
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    // Lists to store song details
+    private val songList = ArrayList<String>()
+    private val artistList = ArrayList<String>()
+    private val ratingList = ArrayList<Int>()
+    private val commentList = ArrayList<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Link UI elements
+        val inputTitle = findViewById<EditText>(R.id.inputTitle)
+        val inputArtist = findViewById<EditText>(R.id.inputArtist)
+        val inputRating = findViewById<EditText>(R.id.inputRating)
+        val inputComment = findViewById<EditText>(R.id.inputComment)
+
+        val btnAdd = findViewById<Button>(R.id.btnAdd)
+        val btnNext = findViewById<Button>(R.id.btnNext)
+        val btnClose = findViewById<Button>(R.id.btnClose)
+
+        // Add button logic
+        btnAdd.setOnClickListener {
+            val title = inputTitle.text.toString()
+            val artist = inputArtist.text.toString()
+            val ratingText = inputRating.text.toString()
+            val comment = inputComment.text.toString()
+
+            if (title.isEmpty() || artist.isEmpty() || ratingText.isEmpty() || comment.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val rating = ratingText.toIntOrNull()
+            if (rating == null || rating < 1 || rating > 5) {
+                Toast.makeText(this, "Rating must be between 1 and 5", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            songList.add(title)
+            artistList.add(artist)
+            ratingList.add(rating)
+            commentList.add(comment)
+
+            inputTitle.text.clear()
+            inputArtist.text.clear()
+            inputRating.text.clear()
+            inputComment.text.clear()
+
+            Toast.makeText(this, "Song added", Toast.LENGTH_SHORT).show()
+        }
+
+        // View Playlist
+        btnNext.setOnClickListener {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putStringArrayListExtra("titles", songList)
+            intent.putStringArrayListExtra("artists", artistList)
+            intent.putIntegerArrayListExtra("ratings", ratingList)
+            intent.putStringArrayListExtra("comments", commentList)
+            startActivity(intent)
+        }
+
+        // Exit app
+        btnClose.setOnClickListener {
+            finish()
+        }
+    }
