@@ -1,0 +1,22 @@
+package com.example.musicplaylist
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class DetailActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_detail)
+
+        val outputText = findViewById<TextView>(R.id.outputText)
+        val averageText = findViewById<TextView>(R.id.averageText)
+        val btnBack = findViewById<Button>(R.id.btnBack)
+
+        // Loop through arrays to display songs
+        val songDetails = StringBuilder()
+        for (i in MainActivity.titles.indices) {
+            songDetails.append("Title: ${MainActivity.titles[i]}\n")
+            songDetails.append("Artist: ${MainActivity.artists
